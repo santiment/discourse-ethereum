@@ -1,0 +1,7 @@
+en:
+  js:
+    discourse_ethereum:
+      ethereum_address: "Ethereum address"
+      ethereum: "Ethereum"
+      send_ethereum: "Send Ethereum"
+      send: "Send"

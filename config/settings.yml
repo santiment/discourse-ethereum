@@ -1,0 +1,7 @@
+plugins:
+  discourse_ethereum_enabled:
+    default: true
+    client: true
+  discourse_ethereum_groups:
+    type: "list"
+    default: ""

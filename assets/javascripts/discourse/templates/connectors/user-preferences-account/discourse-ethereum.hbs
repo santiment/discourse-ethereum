@@ -1,0 +1,11 @@
+{{#if siteSettings.discourse_ethereum_enabled}}
+  <div class="control-group">
+
+    <label class="control-label">{{i18n "discourse_ethereum.ethereum_address"}}</label>
+
+    <div class="controls">
+      {{input type="text" value=model.custom_fields.ethereum_address}}
+    </div>
+
+  </div>
+{{/if}}

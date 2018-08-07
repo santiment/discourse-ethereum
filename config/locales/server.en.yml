@@ -1,0 +1,4 @@
+en:
+  site_settings:
+    discourse_ethereum_enabled: "Enable Ethereum plugin?"
+    discourse_ethereum_groups: "Enable Ethereum plugin only for member of these groups"
