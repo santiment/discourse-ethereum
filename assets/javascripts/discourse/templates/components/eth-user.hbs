@@ -1,0 +1,9 @@
+{{#link-to "user.summary" user.username}}
+  {{bound-avatar-template user.avatar_template avatarSize}}
+{{/link-to}}
+
+<div class="eth-username">{{user.username}}</div>
+
+{{#unless site.mobileView}}
+  <div class="eth-address">{{user.ethereum_address}}</div>
+{{/unless}}

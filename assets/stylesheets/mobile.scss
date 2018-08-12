@@ -8,3 +8,19 @@
     margin-bottom: 10px;
   }
 }
+
+.eth-input {
+  input {
+    width: 150px;
+  }
+}
+
+.eth-user {
+  width: 115px;
+}
+
+.eth-confirmation {
+  p.eth-confirmation-message {
+    font-size: inherit;
+  }
+}

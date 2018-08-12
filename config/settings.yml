@@ -5,3 +5,5 @@ plugins:
   discourse_ethereum_groups:
     type: "list"
     default: ""
+  discourse_ethereum_all_user:
+    default: true
