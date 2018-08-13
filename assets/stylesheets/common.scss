@@ -29,7 +29,7 @@
   margin: 20px;
 }
 
-.eth-transaction-info, .eth-input, .eth-confirmation {
+.eth-transaction-info, .eth-input {
   text-align: center;
 }
 
@@ -60,21 +60,6 @@
   > span {
     color: $primary-high;
   }
-}
-
-.eth-confirmation {
-  p.eth-confirmation-message {
-    font-size: 1.2rem;
-  }
-
-  a {
-    font-weight: bold;
-  }
-
-  .eth-address {
-    font-size: 85%;
-  }
-
 }
 
 .eth-processing {

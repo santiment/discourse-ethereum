@@ -1,6 +1,5 @@
 import ModalFunctionality from "discourse/mixins/modal-functionality";
-import { default as computed, observes, on } from "ember-addons/ember-computed-decorators";
-import { userPath } from "discourse/lib/url";
+import computed from "ember-addons/ember-computed-decorators";
 
 export default Ember.Controller.extend(ModalFunctionality, {
 
@@ -9,7 +8,6 @@ export default Ember.Controller.extend(ModalFunctionality, {
       _balance: null,
       isLoading: false,
       amount: 0,
-      showConfirm: false,
       isSuccess: false,
       transactionID: null
     });
@@ -23,7 +21,7 @@ export default Ember.Controller.extend(ModalFunctionality, {
   balance(balance) {
     if (!balance) return;
 
-    return balance.dividedBy(1e18).toNumber();
+    return parseFloat(web3.fromWei(balance.toNumber()));
   },
 
   @computed("balance")
@@ -43,11 +41,6 @@ export default Ember.Controller.extend(ModalFunctionality, {
     return parseFloat(amount);
   },
 
-  @computed("model.username")
-  targetUserUrl(username) {
-    return userPath(username);
-  },
-
   updateModal(opts) {
     opts = opts || {}
 
@@ -57,45 +50,48 @@ export default Ember.Controller.extend(ModalFunctionality, {
   },
 
   process() {
-    this.setProperties({
-      isLoading: true,
-      showConfirm: false
-    });
+    this.set("isLoading", true);
 
     this.updateModal({ dismissable: false });
 
     Ember.run.later(this, () => {
-      this.set("isLoading", false);
-      this.success();
-      this.updateModal();
+      web3.eth.sendTransaction({
+        from: this.currentUser.get("ethereum_address"),
+        to: this.get("model.ethereum_address"),
+        value: web3.toWei(this.get("formatedAmount"))
+      }, (err, transactionID) => {
+        this.set("isLoading", false);
+
+        if (err) {
+          this.error(err);
+        } else {
+          this.success(transactionID);
+        }
+
+        this.updateModal();
+      });
     }, 5 * 1000);
   },
 
-  success() {
+  success(transactionID) {
     this.setProperties({
       isSuccess: true,
-      transactionID: "0x7f9fade1c0d57a7af66ab4ead7c2eb7b11a91385"
+      transactionID: transactionID
     });
   },
 
   error(error) {
-    this.flash(error, "alert-error");
+    console.error(error);
+
+    this.flash(I18n.t("discourse_ethereum.error_message"), "alert-error");
   },
   
   actions: {
-    showConfirm() {
+    send() {
       if (this.get("isDisabled")) return;
 
       this.clearFlash();
-      this.set("showConfirm", true);
-    },
-
-    send() {
       this.process();
-    },
-
-    cancel() {
-      this.set("showConfirm", false);
     }
   }
 
