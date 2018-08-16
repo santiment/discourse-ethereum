@@ -1,0 +1,91 @@
+.user-card-additional-controls-outlet.discourse-ethereum {
+  clear: right;
+  float: right;
+}
+
+.user-main .about:not(.collapsed-info) .user-profile-controls-outlet.discourse-ethereum button {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+#send-eth {
+  text-align: center;
+}
+
+.eth-transaction-info {
+  width: 100%;
+  display: flex;
+}
+
+.eth-user {
+  width: 175px;
+}
+
+.eth-user-gap {
+  flex: 1;
+  font-size: 2.5rem;
+  color: $primary-high;
+  align-self: center;
+  margin: 20px;
+}
+
+.eth-transaction-info, .eth-input {
+  text-align: center;
+}
+
+.eth-username {
+  margin-top: 10px;
+  font-size: 1.15rem;
+  font-weight: bold;
+}
+
+.eth-address {
+  color: $primary-medium;
+  font-size: 0.85rem;
+  word-wrap: break-word;
+}
+
+.eth-input {
+  margin: 20px 0 10px;
+
+  > input {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+}
+
+.eth-balance {
+  margin-bottom: 10px;
+
+  > span {
+    color: $primary-high;
+  }
+}
+
+.eth-processing {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: $primary-high;
+}
+
+.eth-success {
+  i {
+    color: $success;
+    font-size: 6rem;
+  }
+}
+
+.eth-transaction-id-label {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.eth-transaction-id {
+  color: $primary-high;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.eth-success-message, .eth-ok-btn {
+  margin-top: 1rem;
+}

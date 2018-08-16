@@ -1,0 +1,26 @@
+.user-main .user-profile-controls-outlet.discourse-ethereum {
+   > span {
+    margin: 0
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+.eth-input {
+  input {
+    width: 150px;
+  }
+}
+
+.eth-user {
+  width: 115px;
+}
+
+.eth-transaction-id {
+  max-width: 300px;
+  margin: 0 auto;
+  word-wrap: break-word;
+}

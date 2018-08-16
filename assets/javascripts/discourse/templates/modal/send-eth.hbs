@@ -1,0 +1,67 @@
+{{#d-modal-body id="send-eth" title="discourse_ethereum.send_ethereum"}}
+
+  {{#conditional-loading-spinner condition=isLoading}}
+    {{#if isSuccess}}
+      <p class="eth-success">
+        {{d-icon "check"}}
+
+        <div class="eth-transaction-id-label">{{i18n "discourse_ethereum.transaction_id"}}</div>
+        <div class="eth-transaction-id">{{ transactionID }}</div>
+
+        <div class="eth-success-message">
+          {{i18n "discourse_ethereum.success_message"}}
+        </div>
+
+        {{d-button
+          label="discourse_ethereum.ok"
+          action="closeModal"
+          class="btn-large btn-primary eth-ok-btn"
+        }}
+      </p>
+    {{else}}
+      <div class="eth-transaction-info">
+        {{eth-user user=currentUser}}
+
+        <div class="eth-user-gap">
+          {{d-icon "exchange"}}
+        </div>
+
+        {{eth-user user=model}}
+      </div>
+
+      <div class="eth-input">
+        <div class="eth-balance">
+          <span>{{i18n "discourse_ethereum.balance"}}</span>
+          <strong>{{ formatedBalance }}</strong>
+        </div>
+
+        {{input
+          type="number"
+          value=amount
+          placeholder=(i18n "discourse_ethereum.enter_amount")
+          min=0
+          max=balance
+          step="0.001"
+        }}
+
+        <div>
+          {{d-button
+            disabled=isDisabled
+            action="send"
+            class="btn-large btn-primary"
+            label="discourse_ethereum.send"
+          }}
+        </div>
+      </div>
+    {{/if}}
+  {{/conditional-loading-spinner}}
+
+  {{#if isLoading}}
+    <p>
+      <div class="eth-processing">
+        {{i18n "discourse_ethereum.processing"}}
+      </div>
+    </p>
+  {{/if}}
+
+{{/d-modal-body}}

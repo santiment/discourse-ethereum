@@ -1,0 +1,13 @@
+en:
+  js:
+    discourse_ethereum:
+      ethereum_address: "Ethereum address"
+      send_ethereum: "Send ETH"
+      send: "Send"
+      enter_amount: "Enter the amount"
+      balance: "Balance:"
+      processing: "Processing transaction..."
+      transaction_id: "Transaction Hash:"
+      success_message: "You both will receive a PM containing the detail of the transaction."
+      error_message: "An error has occured."
+      ok: "OK"

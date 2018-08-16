@@ -1,0 +1,11 @@
+plugins:
+  discourse_ethereum_enabled:
+    default: true
+    client: true
+  discourse_ethereum_groups:
+    type: "list"
+    default: ""
+  discourse_ethereum_all_user:
+    default: true
+  discourse_ethereum_test:
+    default: true
