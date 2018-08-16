@@ -19,5 +19,4 @@
 ### PM
 PM containing the transaction details sent by `system` to both user:
 
-![pm](screenshot/pm-px-details.png)
-
+![pm](screenshot/pm-tx-details.png)
