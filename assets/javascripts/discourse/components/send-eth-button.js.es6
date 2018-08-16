@@ -1,5 +1,5 @@
 import showModal from "discourse/lib/show-modal";
-import { default as computed, observes, on } from "ember-addons/ember-computed-decorators";
+import computed from "ember-addons/ember-computed-decorators";
 
 export default Ember.Component.extend({
   tagName: "span",

@@ -7,3 +7,5 @@ plugins:
     default: ""
   discourse_ethereum_all_user:
     default: true
+  discourse_ethereum_test:
+    default: true

@@ -1,5 +1,4 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
-//import { default as computed, observes, on } from "ember-addons/ember-computed-decorators";
 import PreferencesAccount from "discourse/controllers/preferences/account";
 
 function initWithApi(api) {

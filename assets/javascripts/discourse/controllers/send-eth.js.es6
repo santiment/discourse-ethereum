@@ -1,5 +1,7 @@
 import ModalFunctionality from "discourse/mixins/modal-functionality";
 import computed from "ember-addons/ember-computed-decorators";
+import getUrl from "discourse-common/lib/get-url";
+import { ajax } from "discourse/lib/ajax";
 
 export default Ember.Controller.extend(ModalFunctionality, {
 
@@ -28,7 +30,7 @@ export default Ember.Controller.extend(ModalFunctionality, {
   formatedBalance(balance) {
     if (!balance) return;
 
-    return balance.toFixed(3);
+    return balance.toFixed(5);
   },
 
   @computed("isLoading", "balance", "formatedAmount")
@@ -77,6 +79,14 @@ export default Ember.Controller.extend(ModalFunctionality, {
     this.setProperties({
       isSuccess: true,
       transactionID: transactionID
+    });
+
+    ajax(getUrl("/ethereum"), {
+      type: "POST",
+      data: {
+        tx_hash: transactionID,
+        target_user_id: this.get("model.id")
+      }
     });
   },
 
