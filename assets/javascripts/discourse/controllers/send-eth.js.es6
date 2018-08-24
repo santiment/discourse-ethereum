@@ -11,10 +11,11 @@ export default Ember.Controller.extend(ModalFunctionality, {
       isLoading: false,
       amount: 0,
       isSuccess: false,
-      transactionID: null
+      transactionID: null,
+      senderAddress: web3.eth.defaultAccount
     });
 
-    web3.eth.getBalance(this.currentUser.get("ethereum_address"), (e, balance) => {
+    web3.eth.getBalance(this.get("senderAddress"), (e, balance) => {
       e ? console.error(e) : this.set("_balance", balance);
     });
   },
@@ -58,7 +59,7 @@ export default Ember.Controller.extend(ModalFunctionality, {
 
     Ember.run.later(this, () => {
       web3.eth.sendTransaction({
-        from: this.currentUser.get("ethereum_address"),
+        from: this.get("senderAddress"),
         to: this.get("model.ethereum_address"),
         value: web3.toWei(this.get("formatedAmount"))
       }, (err, transactionID) => {

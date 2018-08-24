@@ -7,6 +7,11 @@ export default Ember.Component.extend({
   @computed("site.mobileView")
   avatarSize(mobileView) {
     return (mobileView ? "large" : "extra_large");
+  },
+
+  @computed("user.ethereum_address")
+  ethereumAddress(ethAddress) {
+    return ethAddress || web3.eth.defaultAccount;
   }
 
 });
