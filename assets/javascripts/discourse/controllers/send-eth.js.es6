@@ -3,6 +3,33 @@ import computed from "ember-addons/ember-computed-decorators";
 import getUrl from "discourse-common/lib/get-url";
 import { ajax } from "discourse/lib/ajax";
 
+function getNetworkName(networkId) {
+  let networkName;
+
+  switch (networkId) {
+    case "1":
+      networkName = "main";
+      break;
+    case "3":
+      networkName = "ropsten";
+      break;
+    case "4":
+      networkName = "rinkeby";
+      break;
+    case "42":
+      networkName = "kovan";
+      break;
+    default:
+      networkName = "private";
+  }
+
+  return networkName;
+}
+
+function fromWei(bigNumber) {
+  return web3.fromWei(bigNumber.toNumber());
+}
+
 export default Ember.Controller.extend(ModalFunctionality, {
 
   onShow() {
@@ -24,7 +51,7 @@ export default Ember.Controller.extend(ModalFunctionality, {
   balance(balance) {
     if (!balance) return;
 
-    return parseFloat(web3.fromWei(balance.toNumber()));
+    return parseFloat(fromWei(balance));
   },
 
   @computed("balance")
@@ -57,44 +84,63 @@ export default Ember.Controller.extend(ModalFunctionality, {
 
     this.updateModal({ dismissable: false });
 
-    Ember.run.later(this, () => {
-      web3.eth.sendTransaction({
-        from: this.get("senderAddress"),
-        to: this.get("model.ethereum_address"),
-        value: web3.toWei(this.get("formatedAmount"))
-      }, (err, transactionID) => {
-        this.set("isLoading", false);
-
-        if (err) {
-          this.error(err);
-        } else {
-          this.success(transactionID);
-        }
-
-        this.updateModal();
-      });
-    }, 5 * 1000);
+    web3.eth.sendTransaction({
+      from: this.get("senderAddress"),
+      to: this.get("model.ethereum_address"),
+      value: web3.toWei(this.get("formatedAmount"))
+    }, (err, transactionID) => {
+      if (err) {
+        this.error(err);
+      } else {
+        this.success(transactionID);
+      }
+    });
   },
 
   success(transactionID) {
-    this.setProperties({
-      isSuccess: true,
-      transactionID: transactionID
+    web3.eth.getTransaction(transactionID, (err, tx) => {
+      if (err) return this.error(err);
+
+      // create topic
+      ajax(getUrl("/ethereum"), {
+        type: "POST",
+        data: {
+          tx: {
+            hash: tx.hash,
+            from: {
+              username: this.currentUser.get("username"),
+              address: tx.from
+            },
+            to: {
+              username: this.get("model.username"),
+              address: tx.to
+            },
+            value: fromWei(tx.value),
+            gas: tx.gas,
+            gas_price: fromWei(tx.gasPrice),
+            net_name: getNetworkName(web3.version.network)
+          }
+        }
+      }).then((result) => {
+        // bg job is created
+        this.setProperties({
+          isLoading: false,
+          isSuccess: true,
+          transactionID: tx.hash
+        });
+
+        this.updateModal();
+      }).catch(this.error);
     });
 
-    ajax(getUrl("/ethereum"), {
-      type: "POST",
-      data: {
-        tx_hash: transactionID,
-        target_user_id: this.get("model.id")
-      }
-    });
   },
 
   error(error) {
     console.error(error);
 
     this.flash(I18n.t("discourse_ethereum.error_message"), "alert-error");
+    this.set("isLoading", false);
+    this.updateModal();
   },
   
   actions: {

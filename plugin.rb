@@ -47,15 +47,9 @@ after_initialize {
     before_action :ensure_logged_in
 
     def send_tx_details
-      params.require([:tx_hash, :target_user_id])
+      tx = params.require(:tx)
 
-      args = {
-        hash: params[:tx_hash],
-        from_id: current_user.id,
-        to_id: params[:target_user_id]
-      }
-
-      Jobs.enqueue(:send_tx_details, args)
+      Jobs.enqueue(:send_tx_details, tx.to_unsafe_hash)
 
       render json: success_json
     end

@@ -1,15 +1,16 @@
 module Ethereum
-  class << self
+  class TxDetail
 
-    def send_tx_details(hash, from, to)
-      url     = "https://api.infura.io/v1/jsonrpc/#{network}/eth_getTransactionByHash?params=[\"#{hash}\"]"
-      result  = JSON.parse(open(url).read)["result"]
+    def initialize(tx)
+      @tx = tx
+    end
 
+    def send_pm
       opts = {
-        title: t("pm_title", hash: result["hash"]),
+        title: title,
         archetype: Archetype.private_message,
-        target_usernames: [from.username, to.username],
-        raw: t("pm_body", table: tx_table(result, from, to)),
+        target_usernames: target_usernames,
+        raw: t("pm_body", table: tx_table),
         skip_validations: true
       }
 
@@ -18,42 +19,53 @@ module Ethereum
       PostCreator.create!(creator, opts)
     end
 
-    def tx_table(result, from, to)
-      [
-        "| | |",
-        "|-|-|",
-        "#{t('pm_table.hash')}      | [#{result['hash']}](https://#{network}.etherscan.io/tx/#{result['hash']})",
-        "#{t('pm_table.from')}      | @#{from.username} (#{result['from']})",
-        "#{t('pm_table.to')}        | @#{to.username} (#{result['to']})",
-        "#{t('pm_table.value')}     | #{hex_to_ether(result['value'])} #{t('ether')}",
-        "#{t('pm_table.gas')}       | #{from_hex(result['gas'])}",
-        "#{t('pm_table.gas_price')} | #{hex_to_ether(result['gasPrice'])} #{t('ether')}"
-      ].join("\n")
-    end
+    private
 
-    def t(path, args = {})
-      I18n.t("discourse_ethereum.#{path}", args)
-    end
+      def title
+        tx_hash = @tx["hash"].first(10) + "..." + @tx["hash"].last(5) # use same format with metamask
+        t("pm_title", hash: tx_hash)
+      end
 
-    def network
-      test? ? "kovan" : "mainnet"
-    end
+      def tx_table
+        url     = etherscan_url
+        hash_td = url ? "[#{@tx["hash"]}](#{url})" : @tx["hash"]
 
-    def test?
-      !Rails.env.production? || SiteSetting.discourse_ethereum_test
-    end
+        [
+          "| | |",
+          "|-|-|",
+          "#{t('pm_table.hash')}      | #{hash_td}",
+          "#{t('pm_table.from')}      | #{username_and_address("from")}",
+          "#{t('pm_table.to')}        | #{username_and_address("to")}",
+          "#{t('pm_table.value')}     | #{@tx["value"]}",
+          "#{t('pm_table.gas')}       | #{@tx["gas"]}",
+          "#{t('pm_table.gas_price')} | #{@tx["gas_price"]}"
+        ].join("\n")
+      end
 
-    def from_hex(hex)
-      hex.to_i(16)
-    end
+      def t(path, args = {})
+        I18n.t("discourse_ethereum.#{path}", args)
+      end
 
-    def wei_to_ether(wei)
-      BigDecimal((1.0 * wei / 10**18).to_s).to_s
-    end
+      def target_usernames
+        ["from", "to"].map { |k| @tx.dig(k, "username") }
+      end
 
-    def hex_to_ether(hex)
-      wei_to_ether(from_hex(hex))
-    end
+      def username_and_address(key)
+        "@#{@tx.dig(key, "username")} (#{@tx.dig(key, "address")})"
+      end
+
+      def etherscan_url
+        return if @tx["net_name"] == "private"
+
+        prefix = case @tx["net_name"]
+          when "main"
+            ""
+          else
+            @tx["net_name"] + "."
+          end
+
+        "https://#{prefix}etherscan.io/tx/#{@tx["hash"]}"
+      end
 
   end
 end
