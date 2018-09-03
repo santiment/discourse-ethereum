@@ -13,8 +13,10 @@ en:
 
     pm_table:
       hash: "__Hash__"
+      contract: "__Contract__"
       from: "__From__"
       to: "__To__"
+      token_transfered: "__Token Transfered__"
       value: "__Value__"
       gas: "__Gas__"
       gas_price: "__Gas Price__"

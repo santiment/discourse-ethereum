@@ -31,18 +31,30 @@
 
       <div class="eth-input">
         <div class="eth-balance">
-          <span>{{i18n "discourse_ethereum.balance"}}</span>
-          <strong>{{ formatedBalance }}</strong>
+          {{#if formatedBalance}}
+            <span>{{i18n "discourse_ethereum.balance"}}</span>
+            <strong>{{formatedBalance}} {{symbol}}</strong>
+          {{/if}}
         </div>
 
-        {{input
-          type="number"
-          value=amount
-          placeholder=(i18n "discourse_ethereum.enter_amount")
-          min=0
-          max=balance
-          step="0.001"
-        }}
+        <div class="eth-inputs">
+          {{input
+            type="number"
+            value=amount
+            placeholder=(i18n "discourse_ethereum.enter_amount")
+            min=0
+            max=balance
+            step="0.001"
+          }}
+
+          {{#if erc20enabled}}
+            <select onchange={{action (mut symbol) value="target.value" }}>
+              {{#each symbols as |sym|}}
+                <option value="{{sym}}" selected={{if (eq sym symbol) "true"}}>{{sym}}</option>
+              {{/each}}
+            </select>
+          {{/if}}
+        </div>
 
         <div>
           {{d-button

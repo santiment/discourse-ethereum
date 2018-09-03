@@ -27,18 +27,23 @@ module Ethereum
       end
 
       def tx_table
-        url     = etherscan_url
-        hash_td = url ? "[#{@tx["hash"]}](#{url})" : @tx["hash"]
+        tx_url              = etherscan_url("tx", @tx["hash"])
+        hash_td             = tx_url ? "[#{@tx["hash"]}](#{tx_url})" : @tx["hash"]
+        contract_td         = @tx["token"] ? "[#{@tx["token"]}](#{etherscan_url("address", @tx["token"])})" : ""
+        token_transfered_td = @tx["token_transfered"] ? "#{@tx["token_transfered"]} __#{@tx["symbol"]}__" : ""
+        value_td            = @tx["value"] ? "#{@tx["value"]} __#{@tx["symbol"]}__" : ""
 
         [
           "| | |",
           "|-|-|",
-          "#{t('pm_table.hash')}      | #{hash_td}",
-          "#{t('pm_table.from')}      | #{username_and_address("from")}",
-          "#{t('pm_table.to')}        | #{username_and_address("to")}",
-          "#{t('pm_table.value')}     | #{@tx["value"]}",
-          "#{t('pm_table.gas')}       | #{@tx["gas"]}",
-          "#{t('pm_table.gas_price')} | #{@tx["gas_price"]}"
+          "#{t('pm_table.hash')}              | #{hash_td}",
+          "#{t('pm_table.contract')}          | #{contract_td}",
+          "#{t('pm_table.from')}              | #{username_and_address("from")}",
+          "#{t('pm_table.to')}                | #{username_and_address("to")}",
+          "#{t('pm_table.token_transfered')}  | #{token_transfered_td}",
+          "#{t('pm_table.value')}             | #{value_td}",
+          "#{t('pm_table.gas')}               | #{@tx["gas"]}",
+          "#{t('pm_table.gas_price')}         | #{@tx["gas_price"]}"
         ].join("\n")
       end
 
@@ -51,20 +56,23 @@ module Ethereum
       end
 
       def username_and_address(key)
-        "@#{@tx.dig(key, "username")} (#{@tx.dig(key, "address")})"
+        address = @tx.dig(key, "address")
+        url     = user_etherscan_url(address)
+        str     = "@#{@tx.dig(key, "username")} "
+
+        str += url ? "([#{address}](#{url}))" : "(address)"
+
+        str
       end
 
-      def etherscan_url
-        return if @tx["net_name"] == "private"
+      def user_etherscan_url(address)
+        @tx["token"] ? etherscan_url("token", @tx["token"] + "?a=" + address) : etherscan_url("address", address)
+      end
 
-        prefix = case @tx["net_name"]
-          when "main"
-            ""
-          else
-            @tx["net_name"] + "."
-          end
+      def etherscan_url(path, address)
+        return if @tx["net_prefix"].nil?
 
-        "https://#{prefix}etherscan.io/tx/#{@tx["hash"]}"
+        "https://#{@tx["net_prefix"]}etherscan.io/#{path}/#{address}"
       end
 
   end

@@ -9,3 +9,4 @@ plugins:
     default: true
   discourse_ethereum_erc20_token:
     default: ""
+    client: true
