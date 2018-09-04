@@ -18,6 +18,11 @@ export default Ember.Component.extend({
   @computed("ethereumAddress")
   etherscanURL(ethAddress) {
     return etherscanURL("address", ethAddress);
+  },
+
+  @computed("ethereumAddress")
+  formatedEthereumAddress(ethAddress) {
+    return ethAddress.slice(0, 10) + "..." + ethAddress.slice(37);
   }
 
 });

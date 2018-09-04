@@ -19,4 +19,8 @@
 ### PM
 PM containing the transaction details sent by `system` to both user:
 
-![pm](screenshot/pm-tx-details.png)
+#### Transfer ETH
+![pm](screenshot/pm-tx-details-eth.png)
+
+#### Transfer ERC20 Token
+![pm](screenshot/pm-tx-details-erc20.png)

@@ -2,4 +2,5 @@
   {{bound-avatar-template user.avatar_template avatarSize}}
 {{/link-to}}
 
-<a class="eth-username" href={{etherscanURL}} title={{ethereumAddress}} target="_blank">{{user.username}}</a>
+<div class="eth-username">{{user.username}}</div>
+<a href={{etherscanURL}} title={{ethereumAddress}} target="_blank" class="eth-address">{{formatedEthereumAddress}}</a>
