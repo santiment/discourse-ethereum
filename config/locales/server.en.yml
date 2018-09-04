@@ -3,7 +3,7 @@ en:
     discourse_ethereum_enabled: "Enable Ethereum plugin"
     discourse_ethereum_groups: "Enable Ethereum plugin only for member of these groups"
     discourse_ethereum_all_user: "Enable Ethereum plugin for all user"
-    discourse_ethereum_test: "Use Kovan Testnet for testing"
+    discourse_ethereum_erc20_token: "ERC20 token address"
   discourse_ethereum:
     ether: "Ether"
     pm_title: "Transaction %{hash}"
@@ -13,8 +13,10 @@ en:
 
     pm_table:
       hash: "__Hash__"
+      contract: "__Contract__"
       from: "__From__"
       to: "__To__"
+      token_transfered: "__Token Transfered__"
       value: "__Value__"
       gas: "__Gas__"
       gas_price: "__Gas Price__"

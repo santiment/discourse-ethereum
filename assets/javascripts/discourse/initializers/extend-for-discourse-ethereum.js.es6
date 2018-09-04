@@ -14,10 +14,8 @@ function initWithApi(api) {
     _updateEthereumAddress: function() {
       if (!this.siteSettings.discourse_ethereum_enabled) return;
 
-      const saved = this.get("saved");
-
-      if (saved) {
-        this.get("model.id") == this.currentUser.get("id") ? this.setEthAddressFor(this.currentUser) : this.setEthAddressFor(this.get("model"));
+      if (this.get("saved")) {
+        this.setEthAddressFor(this.get("model"));
       }
     }.observes("saved")
 

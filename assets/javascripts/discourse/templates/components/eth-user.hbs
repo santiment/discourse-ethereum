@@ -3,7 +3,4 @@
 {{/link-to}}
 
 <div class="eth-username">{{user.username}}</div>
-
-{{#unless site.mobileView}}
-  <div class="eth-address">{{user.ethereum_address}}</div>
-{{/unless}}
+<a href={{etherscanURL}} title={{ethereumAddress}} target="_blank" class="eth-address">{{formatedEthereumAddress}}</a>

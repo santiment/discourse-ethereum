@@ -15,16 +15,19 @@
 .eth-transaction-info {
   width: 100%;
   display: flex;
+  margin: 1rem 0 3rem;
 }
 
 .eth-user {
-  width: 175px;
+  width: 200px;
+  padding: 1rem;
+  background-color: $primary-very-low;
 }
 
 .eth-user-gap {
   flex: 1;
-  font-size: 2.5rem;
-  color: $primary-high;
+  font-size: 3rem;
+  color: $tertiary;
   align-self: center;
   margin: 20px;
 }
@@ -37,21 +40,37 @@
   margin-top: 10px;
   font-size: 1.15rem;
   font-weight: bold;
+  display: block;
 }
 
 .eth-address {
   color: $primary-medium;
   font-size: 0.85rem;
   word-wrap: break-word;
+
+  &:visited, &:hover {
+    color: $primary-medium;
+  }
 }
 
 .eth-input {
   margin: 20px 0 10px;
+}
 
-  > input {
-    margin-bottom: 20px;
-    text-align: center;
+.eth-inputs {
+  display: inline-flex;
+  margin-bottom: 20px;
+
+  select {
+    background-color: $primary-very-low;
+    width: 75px;
+    border-left: 0;
+  },
+
+  input, select {
+    border-color: $primary-low-mid;
   }
+
 }
 
 .eth-balance {

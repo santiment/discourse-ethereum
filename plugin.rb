@@ -1,5 +1,5 @@
 # name: discourse-ethereum
-# version: 0.1
+# version: 0.1.1
 # author: ProCourse Team
 # url: https://github.com/santiment/discourse-ethereum
 
@@ -19,15 +19,15 @@ after_initialize {
     def can_do_eth_transaction?(target_user)
       return false unless authenticated?
 
+      SiteSetting.discourse_ethereum_enabled &&
       (current_user.id != target_user.id) &&
       eth_enabled_for_user?(current_user) &&
-      eth_enabled_for_user?(target_user)
+      eth_enabled_for_user?(target_user) &&
+      target_user.custom_fields["ethereum_address"].present?
     end
 
     def eth_enabled_for_user?(user = nil)
-      SiteSetting.discourse_ethereum_enabled &&
       user &&
-      user.custom_fields["ethereum_address"].present? &&
       (SiteSetting.discourse_ethereum_all_user || user.groups.where(name: SiteSetting.discourse_ethereum_groups.split("|")).exists?)
     end
 
@@ -37,11 +37,9 @@ after_initialize {
     scope.can_do_eth_transaction?(object)
   }
 
-  %w(user current_user).each do |serializer|
-    add_to_serializer(serializer.to_sym, :ethereum_address) {
-      object.custom_fields["ethereum_address"].to_s.downcase
-    }
-  end
+  add_to_serializer(:user, :ethereum_address) {
+    object.custom_fields["ethereum_address"].to_s.downcase
+  }
 
   require_dependency "application_controller"
   class ::EthereumController < ::ApplicationController
@@ -49,15 +47,9 @@ after_initialize {
     before_action :ensure_logged_in
 
     def send_tx_details
-      params.require([:tx_hash, :target_user_id])
+      tx = params.require(:tx)
 
-      args = {
-        hash: params[:tx_hash],
-        from_id: current_user.id,
-        to_id: params[:target_user_id]
-      }
-
-      Jobs.enqueue(:send_tx_details, args)
+      Jobs.enqueue(:send_tx_details, tx.to_unsafe_hash)
 
       render json: success_json
     end
