@@ -157,25 +157,29 @@ export default Ember.Controller.extend(ModalFunctionality, {
       if (err) return this.error(err);
 
       const txData = {
-        hash: tx.hash,
+        hash: transactionID,
         from: {
           username: this.currentUser.get("username"),
-          address: tx.from
+          address: this.get("senderAddress")
         },
-        to: { username: this.get("model.username") },
-        gas: tx.gas,
-        gas_price: fromWei(tx.gasPrice),
+        to: {
+          username: this.get("model.username"),
+          address: this.get("model.ethereum_address")
+        },
         symbol: this.get("symbol"),
         net_prefix: networkPrefix()
-      }
+      };
 
       if (this.get("symbol") == "ETH") {
-        txData.to.address = tx.to;
-        txData.value = fromWei(tx.value);
+        txData.value = this.get("formatedAmount");
       } else {
-        txData.to.address = this.get("model.ethereum_address");
         txData.token_transfered = this.get("formatedAmount");
         txData.token = this.siteSettings.discourse_ethereum_erc20_token
+      }
+
+      if (tx) {
+        txData.gas = tx.gas;
+        txData.gas_price = fromWei(tx.gasPrice);
       }
 
       // create topic
