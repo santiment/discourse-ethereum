@@ -1,11 +1,13 @@
 # name: discourse-ethereum
 # version: 0.1.2
 # author: ProCourse Team
-# url: https://github.com/procourse/discourse-ethereum
+# url: https://github.com/santiment/discourse-ethereum
 
 enabled_site_setting :discourse_ethereum_enabled
 register_asset "stylesheets/common.scss"
 register_asset "stylesheets/mobile.scss", :mobile
+
+register_editable_user_custom_field :ethereum_address
 
 require_relative "lib/ethereum"
 
