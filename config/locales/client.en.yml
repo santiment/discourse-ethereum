@@ -3,6 +3,7 @@ en:
     discourse_ethereum:
       ethereum_address: "Ethereum address"
       send_ethereum: "Send ETH"
+      send_eth_button: "Send ETH"
       send: "Send"
       enter_amount: "Enter the amount"
       balance: "Balance:"

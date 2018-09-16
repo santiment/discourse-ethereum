@@ -97,7 +97,7 @@ export default Ember.Controller.extend(ModalFunctionality, {
 
   @computed("isLoading", "balance", "formatedAmount")
   isDisabled(isLoading, balance, amount) {
-    return (isLoading || !balance || isNaN(amount) || parseFloat(amount) <= 0 || parseFloat(amount) > balance);
+    return (isLoading || !balance || isNaN(amount) || parseFloat(amount) < 0 || parseFloat(amount) > balance);
   },
 
   @computed("amount")
