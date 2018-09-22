@@ -20,13 +20,13 @@
       </p>
     {{else}}
       <div class="eth-transaction-info">
-        {{eth-user user=currentUser}}
+        {{eth-user user=currentUser ethereumAddress=senderAddress}}
 
         <div class="eth-user-gap">
           {{d-icon "arrow-right"}}
         </div>
 
-        {{eth-user user=model}}
+        {{eth-user user=model ethereumAddress=model.ethereum_address}}
       </div>
 
       <div class="eth-input">

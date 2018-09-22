@@ -10,11 +10,6 @@ export default Ember.Component.extend({
     return (mobileView ? "large" : "extra_large");
   },
 
-  @computed("user.ethereum_address")
-  ethereumAddress(ethAddress) {
-    return ethAddress || web3.eth.defaultAccount;
-  },
-
   @computed("ethereumAddress")
   etherscanURL(ethAddress) {
     return etherscanURL("address", ethAddress);
