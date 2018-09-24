@@ -193,7 +193,7 @@ export default Ember.Controller.extend(ModalFunctionality, {
         this.setProperties({
           isLoading: false,
           isSuccess: true,
-          transactionID: tx.hash
+          transactionID
         });
 
         this.updateModal();
