@@ -21,6 +21,24 @@ function initWithApi(api) {
 
   });
 
+  window.addEventListener("load", async () => {
+    if (window.ethereum) {
+      try {
+        await ethereum.enable();
+        window.web3 = new Web3(ethereum);
+      } catch (error) {
+        //console.log("User denied account access...");
+      }
+    } else if (window.web3) {
+      // console.log("Legacy dapp browsers");
+      // window.web3 = new Web3(web3.currentProvider);
+    }
+    // Non-dapp browsers...
+    else {
+      console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+    }
+  });
+
 }
 
 export default {
