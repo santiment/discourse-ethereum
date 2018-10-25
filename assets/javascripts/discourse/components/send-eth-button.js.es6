@@ -6,7 +6,7 @@ export default Ember.Component.extend({
 
   @computed("model.can_do_eth_transaction")
   disabled(canDoTransaction) {
-    return ( !canDoTransaction || (typeof window.web3 == "undefined") || !web3.eth.defaultAccount );
+    return ( !canDoTransaction || (typeof window.web3 == "undefined") || !window.web3.eth.defaultAccount );
   },
 
   actions: {
