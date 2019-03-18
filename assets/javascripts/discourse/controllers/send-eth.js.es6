@@ -119,11 +119,13 @@ export default Ember.Controller.extend(ModalFunctionality, {
 
     this.updateModal({ dismissable: false });
 
-    const to      = this.get("model.ethereum_address");
-    const value   = web3.toWei(this.get("formatedAmount"));
-    const method  = `process${ this.get("symbol") == "ETH" ? "ETH" : "ERC20" }`;
+    window.withWeb3().then( ()=>{
+      const to      = this.get("model.ethereum_address");
+      const value   = web3.toWei(this.get("formatedAmount"));
+      const method  = `process${ this.get("symbol") == "ETH" ? "ETH" : "ERC20" }`;
 
-    this[method](to, value);
+      return this[method](to, value);
+    });
   },
 
   setupETH() {
