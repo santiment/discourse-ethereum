@@ -49,28 +49,31 @@ export default Ember.Controller.extend(ModalFunctionality, {
   erc20enabled: Ember.computed.notEmpty("siteSettings.discourse_ethereum_erc20_token"),
 
   onShow() {
-    this.setProperties({
-      isLoading: false,
-      amount: 0,
-      isSuccess: false,
-      transactionID: null,
-      senderAddress: web3.eth.defaultAccount,
-      symbol: "ETH"
-    });
 
-    const symbols = ["ETH"];
-
-    this.set("symbols", symbols);
-
-    if (this.get("erc20enabled")) {
-      this.set("contract", web3.eth.contract(ABI).at(this.siteSettings.discourse_ethereum_erc20_token));
-
-      this.get("contract").symbol((e, symbol) => {
-        if (!e) this.set("symbols", ["ETH", symbol])
+    window.withWeb3.then( ()=>{
+      this.setProperties({
+        isLoading: false,
+        amount: 0,
+        isSuccess: false,
+        transactionID: null,
+        senderAddress: web3.eth.defaultAccount,
+        symbol: "ETH"
       });
-    }
 
-    this.notifyPropertyChange("symbol");
+      const symbols = ["ETH"];
+
+      this.set("symbols", symbols);
+      
+      if (this.get("erc20enabled")) {
+        this.set("contract", web3.eth.contract(ABI).at(this.siteSettings.discourse_ethereum_erc20_token));
+
+        this.get("contract").symbol((e, symbol) => {
+          if (!e) this.set("symbols", ["ETH", symbol])
+        });
+      }
+
+      this.notifyPropertyChange("symbol");
+    });
   },
 
   // observers
