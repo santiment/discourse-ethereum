@@ -1,5 +1,5 @@
 module Jobs
-  class SendTxDetails < Jobs::Base
+  class SendTxDetails < ::Jobs::Base
 
     sidekiq_options retry: false
 
